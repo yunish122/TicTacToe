@@ -1,0 +1,12 @@
+{
+  "name": "tictactoe",
+  "version": "1.0.0",
+  "description": "Tic Tac Toe game",
+  "scripts": {
+    "build": "tailwindcss -i ./src/input.css -o ./src/output.css --minify",
+    "dev": "tailwindcss -i ./src/input.css -o ./src/output.css --watch"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
+  }
+} 
