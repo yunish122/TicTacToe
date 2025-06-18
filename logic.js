@@ -4,7 +4,7 @@ const state_variable = {
         '','','',   
         '','',''
     ],
-    currentPlayer: 'X',
+    currentPlayer: 'x',
     gameOver: false,
     winner: null
 }
@@ -15,7 +15,7 @@ function resetGame() {
         '','','',   
         '','',''
     ];
-    state_variable.currentPlayer = "X";
+    state_variable.currentPlayer = "x";
     state_variable.gameOver = false;
     state_variable.winner = null;
     const cell = document.querySelectorAll('.grid_items')
@@ -27,19 +27,19 @@ function cellUpdate(){
     document.getElementById("cellContainer").addEventListener('click',(e)=>{
         /**@type {HTMLButtonElement} */
         let btn = e.target;
-        if(btn.classList.contains('grid_items') && !state_variable.gameOver && !state_variable.cellState[btn.dataset.id]){
-            if(state_variable.currentPlayer === "X"){
+        if(!state_variable.gameOver && !state_variable.cellState[btn.dataset.id] && btn.classList.contains('grid_items')){
+            if(state_variable.currentPlayer === "x"){
                 btn.style.backgroundImage = "url('asset/icons8-x-64.png')";
                 btn.style.backgroundRepeat = "no-repeat";
                 btn.style.backgroundPosition = "center";
                 btn.style.backgroundSize = returnSizes();
-                state_variable.cellState[btn.dataset.id] = "X";
+                state_variable.cellState[btn.dataset.id] = "x";
             } else {
                 btn.style.backgroundImage = "url('asset/icons8-circle-50 (1).png')";
                 btn.style.backgroundRepeat = "no-repeat";
                 btn.style.backgroundPosition = "center";
                 btn.style.backgroundSize = returnSizes();
-                state_variable.cellState[btn.dataset.id] = "O";
+                state_variable.cellState[btn.dataset.id] = "o";
             }
             check_winner();
             if (!state_variable.gameOver) {
@@ -57,7 +57,11 @@ function returnSizes(){
 }
 
 function toggleTurn(){
-    state_variable.currentPlayer = state_variable.currentPlayer === 'X' ? 'O' : 'X';
+    if(state_variable.currentPlayer === 'x'){
+        state_variable.currentPlayer = 'o'
+    }else{
+        state_variable.currentPlayer = 'x'
+    }
     document.getElementById("h1_div").innerText = `Player ${state_variable.currentPlayer}'s Turn`;
 }
 
@@ -74,20 +78,18 @@ const winnerPattern = [
 
 function check_winner(){
     // Check for winner
-    for (const pattern of winnerPattern) {
-        if (pattern.every(n => state_variable.cellState[n] === 'X')) {
-            state_variable.winner = 'X';
-            state_variable.gameOver = true;
-            document.getElementById('h1_div').innerText = 'X wins!';
-            return;
-        }
-        if (pattern.every(n => state_variable.cellState[n] === 'O')) {
-            state_variable.winner = 'O';
-            state_variable.gameOver = true;
-            document.getElementById('h1_div').innerText = 'O wins!';
-            return;
-        }
+    if(winnerPattern.some(pat => pat.every(n => state_variable.cellState[n] === 'x'))){
+        state_variable.winner = 'X';
+        state_variable.gameOver = true;
+        document.getElementById('h1_div').innerText = 'X wins!';
     }
+    if(winnerPattern.some(pat => pat.every(n => state_variable.cellState[n] === 'o'))){
+        state_variable.winner = 'O';
+        state_variable.gameOver = true;
+        document.getElementById('h1_div').innerText = 'O wins!';
+    }
+
+
     
     // Check for draw
     if (state_variable.cellState.every(cell => cell !== '')) {
